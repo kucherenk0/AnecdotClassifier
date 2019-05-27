@@ -19,7 +19,7 @@ install requirements.txt
 ```
 ## Running 
 
-If you running AnecdotClassifier for the first time then you need to train classification model.
+If you are running AnecdotClassifier for the first time then you need to train classification model.
 In order to do this you need to collect dataset from http://anekdot.ru
 
 ```
