@@ -18,32 +18,32 @@ def create_parser():
 
 
 def classify(train_set, sample_text):
-    if os.path.exists('./classifier') and os.path.exists('./pca') and os.path.exists('./vect'):
-        with open('classifier', 'rb') as clf_file:
+    if os.path.exists('./classifier.mdl') and os.path.exists('./pca.mdl') and os.path.exists('./vec.mdl'):
+        with open('classifier.mdl', 'rb') as clf_file:
             clf = pickle.load(clf_file)
-        with open('classifier', 'rb') as pca_file:
+        with open('pca.mdl', 'rb') as pca_file:
             pca = pickle.load(pca_file)
-        with open('classifier', 'rb') as vec_file:
+        with open('vec.mdl', 'rb') as vec_file:
             vec = pickle.load(vec_file)
     else:
         X_train, X_test, y_train, y_test = train_test_split(train_set[0], train_set[1], test_size=0.20, random_state=42)
-        vectoriser = TfidfVectorizer()
+        vec = TfidfVectorizer()
         clf = XGBClassifier()
         pca = PCA(1000)
-        X_train_vec = vectoriser.fit_transform(X_train)
-        X_test_vec = vectoriser.transform(X_test)
+        X_train_vec = vec.fit_transform(X_train)
+        X_test_vec = vec.transform(X_test)
         X_train_vec = X_train_vec.toarray()
         X_test_vec = X_test_vec.toarray()
         X_train_vec_pca = pca.fit_transform(X_train_vec)
         X_test_vec_pca = pca.transform(X_test_vec)
-        clf = clf.fit(X_train_vec_pca, y_train)
+        clf = clf.fit(X_train_vec_pca, y_train, n_jobs=4)
         
-        with open('classifier', 'wb') as clf_file:
-            pickle.dump(clf_file, clf)
-        with open('classifier', 'wb') as pca_file:
-            pickle.dump(pca_file, pca)
-        with open('classifier', 'wb') as vec_file:
-            pickle.dump(vec_file, vec)
+        with open('classifier.mdl', 'wb') as clf_file:
+            pickle.dump(clf, clf_file)
+        with open('pca.mdl', 'wb') as pca_file:
+            pickle.dump(pca, pca_file)
+        with open('vec.mdl', 'wb') as vec_file:
+            pickle.dump(vec, vec_file)
 
     y_pred = clf.predict(pca.transform(vec.transform([sample_text]).toarray()))
     return y_pred
