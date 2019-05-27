@@ -19,11 +19,12 @@ def create_parser():
 
 def classify(train_set, sample_text):
     if os.path.exists('./classifier') and os.path.exists('./pca') and os.path.exists('./vect'):
-        clf_1 = pickle.load(open('classifier', 'rb'))
-        pca_1 = pickle.load(open('pca', 'rb'))
-        vec_1 = pickle.load(open('vect', 'rb'))
-        y_pred = clf_1.predict(pca_1.transform(vec_1.transform([sample_text]).toarray()))
-
+        with open('classifier', 'rb') as clf_file:
+            clf = pickle.load(clf_file)
+        with open('classifier', 'rb') as pca_file:
+            pca = pickle.load(pca_file)
+        with open('classifier', 'rb') as vec_file:
+            vec = pickle.load(vec_file)
     else:
         X_train, X_test, y_train, y_test = train_test_split(train_set[0], train_set[1], test_size=0.20, random_state=42)
         vectoriser = TfidfVectorizer()
@@ -36,8 +37,15 @@ def classify(train_set, sample_text):
         X_train_vec_pca = pca.fit_transform(X_train_vec)
         X_test_vec_pca = pca.transform(X_test_vec)
         clf = clf.fit(X_train_vec_pca, y_train)
-        y_pred = clf.predict(X_test_vec_pca)
+        
+        with open('classifier', 'wb') as clf_file:
+            pickle.dump(clf_file, clf)
+        with open('classifier', 'wb') as pca_file:
+            pickle.dump(pca_file, pca)
+        with open('classifier', 'wb') as vec_file:
+            pickle.dump(vec_file, vec)
 
+    y_pred = clf.predict(pca.transform(vec.transform([sample_text]).toarray()))
     return y_pred
 
 
