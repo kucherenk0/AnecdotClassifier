@@ -10,8 +10,8 @@ Download or clone files from repository
 ```
 make new virtual environment with
 ```
-virtualenv env
-source env/bin/activate
+>> virtualenv env
+>> source env/bin/activate
 ```
 install requirements.txt
 ```
@@ -19,26 +19,41 @@ pip install -r src/requirements.txt
 ```
 ## Running 
 
-#Trainig model
 If you running AnecdotClassifier for the first time then you need to train classification model 
 In order to do this you need to collect dataset from http://anekdot.ru
 
 ```
-python AnecdotClassifier train 
+>> python AnecdotClassifier 
 ```
 It might take some time
-As a result you will see new files in your directory 
-
-### Running using echo
-
-Aslo you can run it using echo tool
 
 ```
->> echo "123 текст 12!" | java SubstringFinder "12"
+Downloading anecdotes...
+Done!
+Training model...
+Done!
+```
+As a result you will see new files in your directory 
+```
+>> tree -L 1
+├── README.md
+├── classifier.mdl
+├── html_source
+├── pca.mdl
+├── requirements.txt
+├── vect.mdl
+└── venv
+```
+**html_source/** directory will contain html pages from  http://anekdot.ru that you'll need to collect a dataset <br>
+**pca.mdl, vect.mdl, classifier.mdl** are files that are needed for the classifier<br>
+Then input the story you need to be classified
+```
+So i'm ready to read your story!
+"Пришли как-то Пупа и Лупа получать зарплату. Но в бухгалтерии всё перепутали и Лупа получил зарплату за Пупу, а Пупа за Лупу."
 ```
 Then you'll recive the result
 ```
-12*3 текст 12*!
+Looks like this is about: Деньги
 ```
 
 ## Authors
