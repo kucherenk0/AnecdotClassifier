@@ -51,9 +51,10 @@ def load_page_data(tags):
         for tag in tags:
             for page in range(tag.get('max_page')):
                 url = 'https://www.anekdot.ru/tags/%s/%d"' % (tag.get('tag_rus'), page)
+                print(f"Downloading {url}")
                 data = s.get(url).text
                 with open('./html_source/%s_page_%d.html' % (
-                tag.get('tag_eng'), page), 'w') as output_file:
+                tag.get('tag_eng'), page), 'w', encoding='utf-8') as output_file:
                     output_file.write(data)
 
 
@@ -63,7 +64,7 @@ def parse_to_list(tags):
     labels = []
     for tag in tags:
         for page in range(tag.get('max_page')):
-            with open('./html_source/%s_page_%d.html' % (tag.get('tag_eng'), page), 'r') as input_file:
+            with open('./html_source/%s_page_%d.html' % (tag.get('tag_eng'), page), 'r', encoding='utf-8') as input_file:
                 text = input_file.read()
                 soup = BeautifulSoup(text, features='lxml')
                 stories = soup.findAll('div', {'class': 'text'})
