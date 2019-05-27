@@ -78,7 +78,7 @@ def parse_to_list(tags):
                     labels.append(tag.get('val'))
 
     marked_list.insert(0, story_list)
-    marked_list.insert(0, labels)
+    marked_list.insert(1, labels)
     return marked_list
 
 
