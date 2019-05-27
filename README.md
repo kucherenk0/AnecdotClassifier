@@ -6,7 +6,7 @@ Simple text classifier for humorous stories, that returns the most appropriate t
 
 Download or clone files from repository 
 ```
->> https://github.com/kucherenk0/AnecdotClassifier.git
+>> git clone https://github.com/kucherenk0/AnecdotClassifier.git
 ```
 make new virtual environment with
 ```
