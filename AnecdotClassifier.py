@@ -1,21 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
-import argparse
 import os
 import random
+import lxml
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import PCA
 from xgboost import XGBClassifier
 import pickle
-
-
-def create_parser():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('option', nargs='?')
-
-    return parser
 
 
 def classify(train_set, sample_text):
@@ -66,7 +59,6 @@ def load_page_data(tags):
         for tag in tags:
             for page in range(tag.get('max_page')):
                 url = 'https://www.anekdot.ru/tags/%s/%d"' % (tag.get('tag_rus'), page)
-                print(f"Downloading {url}")
                 data = s.get(url).text
                 with open('./html_source/%s_page_%d.html' % (
                 tag.get('tag_eng'), page), 'w', encoding='utf-8') as output_file:
