@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import argparse
 import os
+import random
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -26,9 +27,13 @@ def classify(train_set, sample_text):
         with open('vec.mdl', 'rb') as vec_file:
             vec = pickle.load(vec_file)
     else:
+        print('Training model...')
+        # print('While loading, you can read one random joke:')
+        
+        # print(train_set[random.randomint(0, len(train_set))])
         X_train, X_test, y_train, y_test = train_test_split(train_set[0], train_set[1], test_size=0.20, random_state=42)
         vec = TfidfVectorizer()
-        clf = XGBClassifier()
+        clf = XGBClassifier(nthread=-1)
         pca = PCA(1000)
         X_train_vec = vec.fit_transform(X_train)
         X_test_vec = vec.transform(X_test)
@@ -36,7 +41,7 @@ def classify(train_set, sample_text):
         X_test_vec = X_test_vec.toarray()
         X_train_vec_pca = pca.fit_transform(X_train_vec)
         X_test_vec_pca = pca.transform(X_test_vec)
-        clf = clf.fit(X_train_vec_pca, y_train, n_jobs=4)
+        clf = clf.fit(X_train_vec_pca, y_train)
         
         with open('classifier.mdl', 'wb') as clf_file:
             pickle.dump(clf, clf_file)
@@ -46,10 +51,12 @@ def classify(train_set, sample_text):
             pickle.dump(vec, vec_file)
 
     y_pred = clf.predict(pca.transform(vec.transform([sample_text]).toarray()))
+    print('Done!')
     return y_pred
 
 
 def load_page_data(tags):
+    print('Downloading anecdotes...')
     s = requests.Session()
     s.headers.update({
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.9; rv:45.0) Gecko/20100101 Firefox/45.0'
@@ -64,9 +71,11 @@ def load_page_data(tags):
                 with open('./html_source/%s_page_%d.html' % (
                 tag.get('tag_eng'), page), 'w', encoding='utf-8') as output_file:
                     output_file.write(data)
+    print('Done!')
 
 
 def parse_to_list(tags):
+    print('Parsing pages...')
     marked_list = []
     story_list = []
     labels = []
@@ -87,6 +96,7 @@ def parse_to_list(tags):
 
     marked_list.insert(0, story_list)
     marked_list.insert(1, labels)
+    print('Done!')
     return marked_list
 
 
@@ -96,9 +106,10 @@ if __name__ == '__main__':
             {'tag_rus': 'школа', 'tag_eng': 'school', 'max_page': 24, 'val': 2}]
 
     names_map = {0: 'Армия', 1: 'Деньги', 2: 'Школа'}
-
-    load_page_data(tags)
-    sample_story = input()
+    if not (os.path.exists('./classifier.mdl') and os.path.exists('./pca.mdl') and os.path.exists('./vec.mdl')):
+        load_page_data(tags)
     marked_list = parse_to_list(tags)
+    print("So I'm ready to read your story!")
+    sample_story = input()
     prediction = classify(marked_list, sample_story)[0]
-    print(names_map.get(prediction))
+    print("Looks like this is about: " + names_map.get(prediction))
