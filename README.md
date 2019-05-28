@@ -8,7 +8,7 @@ Download or clone files from repository
 ```
 >> git clone https://github.com/kucherenk0/AnecdotClassifier.git
 ```
-make new virtual environment with
+create new virtual environment with
 ```
 >> virtualenv env
 >> source env/bin/activate
