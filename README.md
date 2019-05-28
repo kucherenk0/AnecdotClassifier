@@ -15,7 +15,7 @@ make new virtual environment with
 ```
 install requirements.txt
 ```
->> pip install -r src/requirements.txt
+>> pip install -r requirements.txt
 ```
 ## Running 
 
