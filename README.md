@@ -6,16 +6,16 @@ Simple text classifier for humorous stories, that returns the most appropriate t
 
 Download or clone files from repository 
 ```
->> git clone https://github.com/kucherenk0/AnecdotClassifier.git
+$ git clone https://github.com/kucherenk0/AnecdotClassifier.git
 ```
 create new virtual environment with
 ```
->> virtualenv env
->> source env/bin/activate
+$ python -m virtualenv env
+$ source env/bin/activate
 ```
 install requirements.txt
 ```
->> pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 ## Running 
 
@@ -23,7 +23,7 @@ If you are running AnecdotClassifier for the first time then you need to train c
 In order to do this you need to collect dataset from http://anekdot.ru
 
 ```
->> python AnecdotClassifier 
+$ python AnecdotClassifier 
 ```
 It might take some time
 
@@ -35,7 +35,7 @@ Done!
 ```
 As a result you will see new files in your directory 
 ```
->> tree -L 1
+$ tree -L 1
 ├── README.md
 ├── classifier.mdl
 ├── html_source
